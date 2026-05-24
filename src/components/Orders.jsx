@@ -1,7 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Orders.css';
 
-const Orders = ({ orders, onCancelOrder }) => {
+const StarRating = ({ initialRating = 0, onRate }) => {
+  const [hoverRating, setHoverRating] = useState(0);
+  const [rating, setRating] = useState(initialRating);
+
+  const handleClick = (value) => {
+    setRating(value);
+    onRate(value);
+  };
+
+  return (
+    <div className="star-rating">
+      <span className="rating-text">{rating > 0 ? 'You rated this order:' : 'How was your food? Rate it:'}</span>
+      <div className="stars">
+        {[1, 2, 3, 4, 5].map(star => (
+          <span 
+            key={star}
+            className={`star ${star <= (hoverRating || rating) ? 'active' : ''}`}
+            onMouseEnter={() => setHoverRating(star)}
+            onMouseLeave={() => setHoverRating(0)}
+            onClick={() => handleClick(star)}
+          >
+            ★
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const Orders = ({ orders, onCancelOrder, onMarkDelivered, onRateOrder }) => {
   if (!orders || orders.length === 0) {
     return (
       <div className="orders-container">
@@ -28,6 +57,9 @@ const Orders = ({ orders, onCancelOrder }) => {
                 {order.status === 'Preparing' && (
                   <button className="btn-cancel" onClick={() => onCancelOrder(order.id)}>Cancel</button>
                 )}
+                {order.status === 'Ready' && (
+                  <button className="btn-received" onClick={() => onMarkDelivered(order.id)}>Mark as Received</button>
+                )}
                 <div className={`order-status ${order.status.toLowerCase().replace(' ', '-')}`}>
                   {order.status}
                 </div>
@@ -35,7 +67,7 @@ const Orders = ({ orders, onCancelOrder }) => {
             </div>
             
             {/* Status Progress Bar for active orders */}
-            {order.status !== 'Cancelled' && (
+            {order.status !== 'Cancelled' && order.status !== 'Delivered' && (
               <div className="order-progress-container">
                 <div className="progress-track">
                   <div className={`progress-fill step-${order.status === 'Preparing' ? '1' : '2'}`}></div>
@@ -45,6 +77,16 @@ const Orders = ({ orders, onCancelOrder }) => {
                   <span className={order.status === 'Preparing' || order.status === 'Ready' ? 'active' : ''}>Preparing</span>
                   <span className={order.status === 'Ready' ? 'active' : ''}>Ready</span>
                 </div>
+              </div>
+            )}
+
+            {/* Rating System for Delivered orders */}
+            {order.status === 'Delivered' && (
+              <div className="order-rating-container">
+                <StarRating 
+                  initialRating={order.rating} 
+                  onRate={(val) => onRateOrder(order.id, val)} 
+                />
               </div>
             )}
 

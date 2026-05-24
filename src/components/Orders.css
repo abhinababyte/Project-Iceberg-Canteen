@@ -90,6 +90,71 @@
   color: #fff;
 }
 
+.btn-received {
+  background: var(--primary-neon);
+  color: #0f172a;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+.btn-received:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+}
+
+.order-status.delivered {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--success);
+}
+
+.order-rating-container {
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.star-rating {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rating-text {
+  font-size: 14px;
+  color: #f8fafc;
+  font-weight: 500;
+}
+
+.stars {
+  display: flex;
+  gap: 5px;
+}
+
+.star {
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.1s ease;
+  user-select: none;
+}
+
+.star:hover {
+  transform: scale(1.1);
+}
+
+.star.active {
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
 .order-items {
   margin-bottom: 20px;
 }

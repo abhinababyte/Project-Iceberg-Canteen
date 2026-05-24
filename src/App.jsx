@@ -116,6 +116,18 @@ function App() {
     );
   };
 
+  const handleMarkDelivered = (orderId) => {
+    setOrders(prevOrders => 
+      prevOrders.map(o => o.id === orderId ? { ...o, status: 'Delivered' } : o)
+    );
+  };
+
+  const handleRateOrder = (orderId, rating) => {
+    setOrders(prevOrders => 
+      prevOrders.map(o => o.id === orderId ? { ...o, rating: rating } : o)
+    );
+  };
+
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
 
   const canteenNames = {
@@ -166,7 +178,14 @@ function App() {
       return <Contact />;
     }
     if (activeTab === 'orders') {
-      return <Orders orders={orders} onCancelOrder={handleCancelOrder} />;
+      return (
+        <Orders 
+          orders={orders} 
+          onCancelOrder={handleCancelOrder}
+          onMarkDelivered={handleMarkDelivered}
+          onRateOrder={handleRateOrder}
+        />
+      );
     }
     if (activeTab === 'checkout') {
       return (
