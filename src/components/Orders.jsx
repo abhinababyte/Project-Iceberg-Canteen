@@ -133,7 +133,8 @@ const Orders = ({ orders, onCancelOrder, onMarkDelivered, onRateOrder }) => {
             </div>
           </div>
         )).reverse()}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
