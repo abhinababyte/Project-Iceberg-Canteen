@@ -105,9 +105,15 @@ function App() {
     // Simulate order progression
     setTimeout(() => {
       setOrders(prevOrders => 
-        prevOrders.map(o => o.id === newOrder.id ? { ...o, status: 'Ready' } : o)
+        prevOrders.map(o => (o.id === newOrder.id && o.status === 'Preparing') ? { ...o, status: 'Ready' } : o)
       );
     }, 15000); // 15 seconds to Ready for demo purposes
+  };
+
+  const handleCancelOrder = (orderId) => {
+    setOrders(prevOrders => 
+      prevOrders.map(o => o.id === orderId ? { ...o, status: 'Cancelled' } : o)
+    );
   };
 
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
@@ -160,7 +166,7 @@ function App() {
       return <Contact />;
     }
     if (activeTab === 'orders') {
-      return <Orders orders={orders} />;
+      return <Orders orders={orders} onCancelOrder={handleCancelOrder} />;
     }
     if (activeTab === 'checkout') {
       return (

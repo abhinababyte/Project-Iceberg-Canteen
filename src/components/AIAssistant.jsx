@@ -47,6 +47,18 @@ const AIAssistant = ({ menuData, onAddToCart }) => {
       textResponse = "We have plenty of delicious vegetarian options. Check these out:";
     } else if (q.includes('hi') || q.includes('hello')) {
       return { text: "Hello! Tell me what kind of food you're craving and I'll find the best options for you!" };
+    } else {
+      // Fuzzy search by individual words
+      const words = q.split(' ').filter(w => w.length > 3); // Ignore small words like "i", "want", "for"
+      if (words.length > 0) {
+        recommendedItems = allItems.filter(i => 
+          words.some(w => i.name.toLowerCase().includes(w) || i.description.toLowerCase().includes(w) || i.category.toLowerCase().includes(w))
+        );
+      }
+      
+      if (recommendedItems.length > 0) {
+        textResponse = `I found some options that match what you're looking for:`;
+      }
     }
 
     // Deduplicate recommended items by name

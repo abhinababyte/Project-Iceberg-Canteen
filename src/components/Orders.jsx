@@ -1,7 +1,7 @@
 import React from 'react';
 import './Orders.css';
 
-const Orders = ({ orders }) => {
+const Orders = ({ orders, onCancelOrder }) => {
   if (!orders || orders.length === 0) {
     return (
       <div className="orders-container">
@@ -24,13 +24,18 @@ const Orders = ({ orders }) => {
                 <span className="order-id">Order #{order.id}</span>
                 <span className="order-date">{new Date(order.date).toLocaleString()}</span>
               </div>
-              <div className={`order-status ${order.status.toLowerCase().replace(' ', '-')}`}>
-                {order.status}
+              <div className="order-header-actions">
+                {order.status === 'Preparing' && (
+                  <button className="btn-cancel" onClick={() => onCancelOrder(order.id)}>Cancel</button>
+                )}
+                <div className={`order-status ${order.status.toLowerCase().replace(' ', '-')}`}>
+                  {order.status}
+                </div>
               </div>
             </div>
             
             {/* Status Progress Bar for active orders */}
-            {order.status !== 'Completed' && (
+            {order.status !== 'Cancelled' && (
               <div className="order-progress-container">
                 <div className="progress-track">
                   <div className={`progress-fill step-${order.status === 'Preparing' ? '1' : '2'}`}></div>
