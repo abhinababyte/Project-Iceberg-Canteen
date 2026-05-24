@@ -31,67 +31,93 @@ const StarRating = ({ initialRating = 0, onRate }) => {
 };
 
 const Orders = ({ orders, onCancelOrder, onMarkDelivered, onRateOrder }) => {
-  // Filter out orders that have already been rated
-  const visibleOrders = orders ? orders.filter(o => !o.rating || o.rating === 0) : [];
+  const [view, setView] = useState('active'); // 'active' | 'history'
 
-  if (visibleOrders.length === 0) {
-    return (
-      <div className="orders-container">
-        <h2 className="section-title">Your Orders</h2>
-        <div className="empty-orders glass">
-          <p>You haven't placed any orders yet, or you have rated all your past orders.</p>
-        </div>
-      </div>
-    );
-  }
+  // Filter orders based on active vs history
+  const activeOrders = orders ? orders.filter(o => o.status !== 'Cancelled' && (!o.rating || o.rating === 0)) : [];
+  const historyOrders = orders ? orders.filter(o => o.status === 'Cancelled' || o.rating > 0) : [];
+
+  const displayOrders = view === 'active' ? activeOrders : historyOrders;
 
   return (
     <div className="orders-container">
-      <h2 className="section-title">Your Orders</h2>
-      <div className="orders-list">
-        {visibleOrders.map(order => (
-          <div key={order.id} className="order-card glass">
-            <div className="order-header">
-              <div>
-                <span className="order-id">Order #{order.id}</span>
-                <span className="order-date">{new Date(order.date).toLocaleString()}</span>
-              </div>
-              <div className="order-header-actions">
-                {order.status === 'Preparing' && (
-                  <button className="btn-cancel" onClick={() => onCancelOrder(order.id)}>Cancel</button>
-                )}
-                {order.status === 'Ready' && (
-                  <button className="btn-received" onClick={() => onMarkDelivered(order.id)}>Mark as Received</button>
-                )}
-                <div className={`order-status ${order.status.toLowerCase().replace(' ', '-')}`}>
-                  {order.status}
-                </div>
-              </div>
-            </div>
-            
-            {/* Status Progress Bar for active orders */}
-            {order.status !== 'Cancelled' && order.status !== 'Delivered' && (
-              <div className="order-progress-container">
-                <div className="progress-track">
-                  <div className={`progress-fill step-${order.status === 'Preparing' ? '1' : '2'}`}></div>
-                </div>
-                <div className="progress-labels">
-                  <span className="active">Received</span>
-                  <span className={order.status === 'Preparing' || order.status === 'Ready' ? 'active' : ''}>Preparing</span>
-                  <span className={order.status === 'Ready' ? 'active' : ''}>Ready</span>
-                </div>
-              </div>
-            )}
+      <div className="orders-header-top">
+        <h2 className="section-title">Your Orders</h2>
+        <div className="orders-tabs">
+          <button 
+            className={`tab-btn ${view === 'active' ? 'active' : ''}`}
+            onClick={() => setView('active')}
+          >
+            Active
+          </button>
+          <button 
+            className={`tab-btn ${view === 'history' ? 'active' : ''}`}
+            onClick={() => setView('history')}
+          >
+            History
+          </button>
+        </div>
+      </div>
 
-            {/* Rating System for Delivered orders */}
-            {order.status === 'Delivered' && (
-              <div className="order-rating-container">
-                <StarRating 
-                  initialRating={order.rating} 
-                  onRate={(val) => onRateOrder(order.id, val)} 
-                />
+      {displayOrders.length === 0 ? (
+        <div className="empty-orders glass">
+          <p>{view === 'active' ? "You have no active orders." : "Your order history is empty."}</p>
+        </div>
+      ) : (
+        <div className="orders-list">
+          {displayOrders.map(order => (
+            <div key={order.id} className="order-card glass">
+              <div className="order-header">
+                <div>
+                  <span className="order-id">Order #{order.id}</span>
+                  <span className="order-date">{new Date(order.date).toLocaleString()}</span>
+                </div>
+                <div className="order-header-actions">
+                  {order.status === 'Preparing' && (
+                    <button className="btn-cancel" onClick={() => onCancelOrder(order.id)}>Cancel</button>
+                  )}
+                  {order.status === 'Ready' && (
+                    <button className="btn-received" onClick={() => onMarkDelivered(order.id)}>Mark as Received</button>
+                  )}
+                  <div className={`order-status ${order.status.toLowerCase().replace(' ', '-')}`}>
+                    {order.status}
+                  </div>
+                </div>
               </div>
-            )}
+              
+              {/* Status Progress Bar for active orders */}
+              {order.status !== 'Cancelled' && order.status !== 'Delivered' && (
+                <div className="order-progress-container">
+                  <div className="progress-track">
+                    <div className={`progress-fill step-${order.status === 'Preparing' ? '1' : '2'}`}></div>
+                  </div>
+                  <div className="progress-labels">
+                    <span className="active">Received</span>
+                    <span className={order.status === 'Preparing' || order.status === 'Ready' ? 'active' : ''}>Preparing</span>
+                    <span className={order.status === 'Ready' ? 'active' : ''}>Ready</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Rating System for Delivered active orders */}
+              {order.status === 'Delivered' && (!order.rating || order.rating === 0) && (
+                <div className="order-rating-container">
+                  <StarRating 
+                    initialRating={order.rating} 
+                    onRate={(val) => onRateOrder(order.id, val)} 
+                  />
+                </div>
+              )}
+
+              {/* Static Rating display for History orders */}
+              {view === 'history' && order.rating > 0 && (
+                <div className="history-rating">
+                  <span className="history-rating-text">Your Rating:</span>
+                  <span className="history-stars">
+                    {'★'.repeat(order.rating)}{'☆'.repeat(5 - order.rating)}
+                  </span>
+                </div>
+              )}
 
             <div className="order-items">
               {order.items.map((item, index) => (
