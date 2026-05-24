@@ -31,12 +31,15 @@ const StarRating = ({ initialRating = 0, onRate }) => {
 };
 
 const Orders = ({ orders, onCancelOrder, onMarkDelivered, onRateOrder }) => {
-  if (!orders || orders.length === 0) {
+  // Filter out orders that have already been rated
+  const visibleOrders = orders ? orders.filter(o => !o.rating || o.rating === 0) : [];
+
+  if (visibleOrders.length === 0) {
     return (
       <div className="orders-container">
         <h2 className="section-title">Your Orders</h2>
         <div className="empty-orders glass">
-          <p>You haven't placed any orders yet.</p>
+          <p>You haven't placed any orders yet, or you have rated all your past orders.</p>
         </div>
       </div>
     );
@@ -46,7 +49,7 @@ const Orders = ({ orders, onCancelOrder, onMarkDelivered, onRateOrder }) => {
     <div className="orders-container">
       <h2 className="section-title">Your Orders</h2>
       <div className="orders-list">
-        {orders.map(order => (
+        {visibleOrders.map(order => (
           <div key={order.id} className="order-card glass">
             <div className="order-header">
               <div>
