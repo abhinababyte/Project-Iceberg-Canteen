@@ -2,6 +2,8 @@
 
 Iceberg Canteen is a highly aesthetic, feature-rich college food delivery and ordering web application prototype. Designed to feel like a modern, premium campus equivalent to Swiggy or Zomato, it allows students to browse multiple college canteens, place orders, and chat with an AI assistant.
 
+**🔴 Live Demo:** [https://project-iceberg-canteen.vercel.app](https://project-iceberg-canteen.vercel.app) (Replace with your actual Vercel URL if changed)
+
 ---
 
 ## ✨ Key Features
@@ -18,13 +20,17 @@ Iceberg Canteen is a highly aesthetic, feature-rich college food delivery and or
 - Simulated login system strictly locked to official college email IDs (e.g., `@rcciit.org.in`).
 - Auto-generates user profile badges based on the student's email alias.
 
-### 4. 🛒 Persistent Cart & Live Order Tracking
-- **Local Storage Integration:** Your cart, login session, and order history persist even if you close the browser.
-- **Live Tracking:** After checking out, orders are sent to a persistent dashboard featuring a neon animated progress bar that transitions from `Preparing` to `Ready`.
+### 4. 🛒 Comprehensive Order Management & History
+- **Live Tracking Dashboard:** Track active orders with a neon progress bar from `Preparing` to `Ready`.
+- **Order Cancellation:** Instantly cancel orders while they are still in the `Preparing` phase.
+- **5-Star Rating System:** Mark orders as `Delivered` and leave an interactive 1-to-5 star rating.
+- **Smart Tabs:** The dashboard automatically sorts orders into `Active` (currently cooking) and `History` (past rated/cancelled orders).
+- **Local Storage Integration:** Your cart, login session, and order history strictly persist across browser reloads.
 
 ### 5. 🤖 Chef AI Assistant
 - An interactive, floating animated Chef AI that helps students decide what to eat.
-- **Smart Keyword Engine:** Recommends specific items based on natural language keywords (e.g., "spicy", "sweet", "cheap snack").
+- **Smart Keyword Engine:** Recommends specific items based on natural language broad categories (e.g., "spicy", "sweet", "cheap snack").
+- **Fuzzy Item Searching:** The AI acts as a search assistant, capable of extracting exact dish names from a conversational sentence (e.g., "I'm craving dum biryani") and serving up the exact food card.
 - **Interactive UI:** The AI generates interactive food cards inside the chat window, allowing you to instantly add its recommendations directly to your cart without closing the chat.
 
 ### 6. 📱 Premium Mobile-Responsive UI
