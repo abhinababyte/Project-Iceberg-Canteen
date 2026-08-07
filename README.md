@@ -2,7 +2,7 @@
 
 Iceberg Canteen is a highly aesthetic, feature-rich college food delivery and ordering web application prototype. Designed to feel like a modern, premium campus equivalent to Swiggy or Zomato, it allows students to browse multiple college canteens, place orders, and chat with an AI assistant.
 
-**🔴 Live Demo:** [https://project-iceberg-canteen.vercel.app](https://project-iceberg-canteen.vercel.app) (Replace with your actual Vercel URL if changed)
+**🔴 Live Demo:** [https://project-iceberg-canteen.vercel.app](https://project-iceberg-canteen.vercel.app) 
 
 ---
 
